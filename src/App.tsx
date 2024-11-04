@@ -4,6 +4,7 @@ import { activityReducer, initialState } from "./reducers/activity-reducer";
 
 function App() {
   const [state, dispatch] = useReducer(activityReducer, initialState) 
+  
   return (
     <>
       <header className="bg-lime-600 py-3">
