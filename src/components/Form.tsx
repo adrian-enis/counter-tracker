@@ -1,4 +1,5 @@
 import { useState, ChangeEvent, FormEvent, Dispatch } from "react";
+import { v4 as uuidv4 } from "uuid"
 import { categories } from "../data/categories";
 
 import type { Activity } from "../types";
@@ -9,11 +10,11 @@ type FormProps = {
 } 
 
 const initialState = {
+  id: uuidv4(),
   category: 1,
   name: "",
   calories: 0,
 }
-
 function Form({dispatch}:FormProps) {
   const [activity, setActivity] = useState<Activity>(initialState);
 
@@ -23,22 +24,19 @@ function Form({dispatch}:FormProps) {
     setActivity({
         ...activity,
       [e.target.id]: isNumberField ? +e.target.value : e.target.value
-    });
-
-    
-  
+    });    
   };
-
   const isValidActivity = () => {
     const {name, calories} = activity
-
     return name.trim() !== "" && calories > 0
   }
-
   const handleSubmit = (e :FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     dispatch({type: "save-activity", payload:{newActivity: activity}})
-    setActivity(initialState)
+    setActivity({
+      ...initialState,
+      id:uuidv4()
+    })
   }
 
   return (
@@ -61,18 +59,11 @@ function Form({dispatch}:FormProps) {
         </select>
       </div>
       <div className="grid grid-cols-1 gap-3">
-        <label htmlFor="name" className="font-bold">
-          Activities:
-        </label>
-        <input
-          id="name"
-          type="text"
-          className="border border-slate-300 p-2 rounded-lg"
-          placeholder="Ej. Meal, Orange Juice, Salad, Weights, Bycicles"
-          value={activity.name}
-          onChange={handleChange}
-        />
+          <label htmlFor="name" className="font-bold">Actividad:</label>
+          <input id="name" type="text" className="border border-slate-300 p-2 rounded-lg" 
+          placeholder="Ej. comida, jugo de naranja, Ensalada, Ejercicio, Pesas, Bicicleta" value={activity.name} onChange={handleChange} />
       </div>
+       
       <div className="grid grid-cols-1 gap-3">
         <label htmlFor="calories" className="font-bold">
           Calories:
@@ -88,7 +79,7 @@ function Form({dispatch}:FormProps) {
 
         <input
           type="submit"
-          className="bg-gray-800 hover:bg-gray-900 w-full p-2 uppercase text-white font-bold cursor- disabled:opacity-10"
+          className="bg-gray-800 hover:bg-gray-900 w-full p-2 uppercase text-white font-bold cursor disabled:opacity-10"
           value={activity.category === 1 ? "Save Meal" : "Save Training"}
           disabled={!isValidActivity()}
         />
