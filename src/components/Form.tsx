@@ -1,12 +1,13 @@
-import { useState, ChangeEvent, FormEvent, Dispatch } from "react";
+import { useState, ChangeEvent, FormEvent, Dispatch, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid"
 import { categories } from "../data/categories";
 
 import type { Activity } from "../types";
-import { ActivityActions } from "../reducers/activity-reducer";
+import { ActivityActions, ActivityState } from "../reducers/activity-reducer";
 
 type FormProps = {
-  dispatch: Dispatch<ActivityActions>
+  dispatch: Dispatch<ActivityActions>,
+  state: ActivityState
 } 
 
 const initialState = {
@@ -15,10 +16,15 @@ const initialState = {
   name: "",
   calories: 0,
 }
-function Form({dispatch}:FormProps) {
+function Form({dispatch, state}:FormProps) {
   const [activity, setActivity] = useState<Activity>(initialState);
   
-  
+  useEffect(() => {
+    if(state.activeId){
+
+      console.log("Ya hay algo en activeId")
+    }
+  }, [state.activeId])
   const handleChange = (e : ChangeEvent<HTMLSelectElement> |  ChangeEvent<HTMLInputElement>) => {
     const isNumberField = ["category", "calories"].includes(e.target.id)
     
@@ -26,7 +32,8 @@ function Form({dispatch}:FormProps) {
       ...activity,
       [e.target.id]: isNumberField ? +e.target.value : e.target.value
     });    
-    console.log(e.target.value)
+    // console.log(e.target.value)
+    
   };
   const isValidActivity = () => {
     const {name, calories} = activity

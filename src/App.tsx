@@ -16,13 +16,19 @@ function App() {
         </div>
         <section className="bg-lime-500 py-20 px-5">
           <div className="max-w-4xl mx-auto">
-            <Form  dispatch={dispatch}/>
+            <Form  
+            dispatch={dispatch}
+            state={state}
+            />
           </div>
         </section>
       </header>
 
       <section className="p-10 mx-auto max-w-4xl bg-slate-800 ">
-        <ActivityList activities={state.activities}/>
+        <ActivityList 
+        activities={state.activities}
+        dispatch={dispatch}
+        />
       </section>
     </>
   );
