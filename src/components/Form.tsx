@@ -21,8 +21,8 @@ function Form({dispatch, state}:FormProps) {
   
   useEffect(() => {
     if(state.activeId){
-
-      console.log("Ya hay algo en activeId")
+      const selectActivity = state.activities.filter(stateActivity => stateActivity.id === state.activeId)[0];
+      setActivity(selectActivity) 
     }
   }, [state.activeId])
   const handleChange = (e : ChangeEvent<HTMLSelectElement> |  ChangeEvent<HTMLInputElement>) => {
